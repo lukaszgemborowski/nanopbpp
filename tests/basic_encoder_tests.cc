@@ -1,12 +1,11 @@
 #include <gtest/gtest.h>
 
 #include <vector>
-#include <tuple>
 #include <nanopbpp/basic_encoder.h>
 #include <nanopbpp/meta_encoder.h>
 #include <pb_decode.h>
 
-#include "test.pb.h"
+#include "meta.h"
 
 TEST(basic_encoder_tests, encoding_into_vector)
 {
@@ -41,10 +40,6 @@ TEST(basic_encoder_tests, vector_to_small)
 	auto encoder = nanopbpp::create_encoder(buffer.begin(), buffer.end());
 	ASSERT_FALSE(encoder.encode(IntegerContainer_fields, &source));
 }
-
-std::tuple<
-	nanopbpp::message_metadata<IntegerContainer>
-> messages_metadata = std::make_tuple(IntegerContainer_fields);
 
 TEST(basic_encoder_tests, meta_encoder)
 {

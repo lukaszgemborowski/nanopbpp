@@ -38,6 +38,7 @@ add_executable(tests
 	nanopb_basic_tests.cc
 	basic_encoder_tests.cc
 	basic_decoder_tests.cc
+	uncategorized_tests.cc
 	${test-pb-c}
 	${NANOPB_SRC})
 
