@@ -30,5 +30,3 @@ TEST(nanopb, encode_decode_basic_buffer)
 	ASSERT_EQ(source.has_b, destination.has_b);
 	ASSERT_EQ(source.b, destination.b);
 }
-
-
