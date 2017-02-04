@@ -3,6 +3,7 @@
 #include <vector>
 #include <tuple>
 #include <nanopbpp/basic_encoder.h>
+#include <nanopbpp/meta_encoder.h>
 #include <pb_decode.h>
 
 #include "test.pb.h"
@@ -65,4 +66,3 @@ TEST(basic_encoder_tests, meta_encoder)
 	ASSERT_EQ(source.has_b, destination.has_b);
 	ASSERT_EQ(source.b, destination.b);
 }
-
