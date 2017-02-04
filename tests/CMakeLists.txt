@@ -7,6 +7,7 @@ find_package(Threads REQUIRED)
 set(NANOPB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../nanopb)
 set(TEST_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 set(BUILD_DIR ${CMAKE_CURRENT_BINARY_DIR})
+set(ROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/..)
 
 set(test-pb ${BUILD_DIR}/test.pb)
 set(test-pb-c ${TEST_DIR}/test.pb.c)
@@ -23,6 +24,7 @@ add_custom_command(
 	MAIN_DEPENDENCY ${TEST_DIR}/test.proto)
 
 include_directories(
+	${ROOT_DIR}/include
 	${NANOPB_DIR}
 	${GTEST_INCLUDE_DIRS})
 

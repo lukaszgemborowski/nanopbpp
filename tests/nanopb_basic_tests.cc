@@ -1,3 +1,5 @@
+#include <vector>
+#include <nanopbpp/basic_encoder.h>
 #include <gtest/gtest.h>
 #include <pb.h>
 #include <pb_decode.h>
@@ -24,6 +26,27 @@ TEST(nanopb, encode_decode_basic_buffer)
 	ASSERT_TRUE(pb_encode(&ostream, IntegerContainer_fields, &source));
 
 	auto istream = pb_istream_from_buffer(buffer, ostream.bytes_written);
+	ASSERT_TRUE(pb_decode(&istream, IntegerContainer_fields, &destination));
+
+	ASSERT_EQ(source.a, destination.a);
+	ASSERT_EQ(source.has_b, destination.has_b);
+	ASSERT_EQ(source.b, destination.b);
+}
+
+TEST(nanopb, custom_encoder_with_vector)
+{
+	std::vector<uint8_t> buffer(512);
+	IntegerContainer source = { 0 };
+	IntegerContainer destination = { 0 };
+
+	source.a = 1;
+	source.has_b = true;
+	source.b = 2;
+
+	auto encoder = nanopbpp::create_encoder(buffer.begin(), buffer.end());
+	encoder.encode(IntegerContainer_fields, &source);
+
+	auto istream = pb_istream_from_buffer(buffer.data(), encoder.size());
 	ASSERT_TRUE(pb_decode(&istream, IntegerContainer_fields, &destination));
 
 	ASSERT_EQ(source.a, destination.a);
