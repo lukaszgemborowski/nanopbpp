@@ -1,0 +1,7 @@
+syntax = "proto2";
+import "nanopb.proto";
+
+message IntegerContainer {
+	required int32 a = 1;
+	optional int32 b = 2;
+}
