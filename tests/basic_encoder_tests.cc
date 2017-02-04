@@ -26,3 +26,16 @@ TEST(basic_encoder_tests, encoding_into_vector)
 	ASSERT_EQ(source.has_b, destination.has_b);
 	ASSERT_EQ(source.b, destination.b);
 }
+
+TEST(basic_encoder_tests, vector_to_small)
+{
+	std::vector<uint8_t> buffer(2);
+	IntegerContainer source = { 0 };
+
+	source.a = 1;
+	source.has_b = true;
+	source.b = 2;
+
+	auto encoder = nanopbpp::create_encoder(buffer.begin(), buffer.end());
+	ASSERT_FALSE(encoder.encode(IntegerContainer_fields, &source));
+}
