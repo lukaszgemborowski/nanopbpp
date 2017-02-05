@@ -6,10 +6,15 @@ message IntegerContainer {
 	optional int32 b = 2;
 }
 
+message FloatContainer {
+	required float c = 1;
+}
+
 message Extendable {
 	extensions 10 to 100;
 }
 
 extend Extendable {
 	optional IntegerContainer field_a = 11;
+	optional FloatContainer field_b = 12;
 }

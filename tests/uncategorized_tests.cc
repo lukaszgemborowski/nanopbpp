@@ -136,3 +136,33 @@ TEST(uncategorized_tests, extension_helper)
 	ASSERT_EQ(source_ext.value().has_b, destination_ext.value().has_b);
 	ASSERT_EQ(source_ext.value().b, destination_ext.value().b);
 }
+
+TEST(uncategorized_tests, extension_set_usage)
+{
+	std::vector<uint8_t> buffer(256);
+
+	auto source_set = nanopbpp::make_extension_set(
+		nanopbpp::extension_with_storage<field_a_tag, IntegerContainer>(field_a),
+		nanopbpp::extension_with_storage<field_b_tag, FloatContainer>(field_b)
+	);
+
+	auto destination_set = source_set;
+
+	source_set.get_by_tag<field_a_tag>().value().a = 2;
+	source_set.get_by_tag<field_a_tag>().value().has_b = true;
+	source_set.get_by_tag<field_a_tag>().value().b = 3;
+	source_set.get_by_tag<field_b_tag>().value().c = 4.5f;
+
+	Extendable source = {0}, destination = {0};
+
+	source_set.attach(source);
+	ASSERT_TRUE(nanopbpp::create_encoder(buffer.begin(), buffer.end(), messages_metadata).encode(source));
+
+	destination_set.attach(destination);
+	ASSERT_TRUE(nanopbpp::create_decoder(buffer.begin(), buffer.end(), messages_metadata).decode(destination));
+
+	ASSERT_EQ(source_set.get_by_index<0>().value().a, destination_set.get_by_index<0>().value().a);
+	ASSERT_EQ(source_set.get_by_index<0>().value().has_b, destination_set.get_by_index<0>().value().has_b);
+	ASSERT_EQ(source_set.get_by_index<0>().value().b, destination_set.get_by_index<0>().value().b);
+	ASSERT_EQ(source_set.get_by_index<1>().value().c, destination_set.get_by_index<1>().value().c);
+}
