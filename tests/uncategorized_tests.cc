@@ -89,8 +89,8 @@ TEST(uncategorized_tests, base_extension_usage)
 	std::vector<uint8_t> buffer(256);
 
 	IntegerContainer source_storage = { 0 }, destination_storage = { 0 };
-	nanopbpp::base_extension source_ext(field_a);
-	nanopbpp::base_extension destination_ext(field_a);
+	nanopbpp::base_extension<field_a_tag> source_ext(field_a);
+	nanopbpp::base_extension<field_a_tag> destination_ext(field_a);
 
 	source_storage.a = 2;
 	source_storage.has_b = true;
@@ -115,8 +115,8 @@ TEST(uncategorized_tests, extension_helper)
 {
 	std::vector<uint8_t> buffer(256);
 
-	nanopbpp::extension_with_storage<IntegerContainer> source_ext(field_a);
-	nanopbpp::extension_with_storage<IntegerContainer> destination_ext(field_a);
+	nanopbpp::extension_with_storage<field_a_tag, IntegerContainer> source_ext(field_a);
+	nanopbpp::extension_with_storage<field_a_tag, IntegerContainer> destination_ext(field_a);
 
 	source_ext.value().a = 2;
 	source_ext.value().has_b = true;

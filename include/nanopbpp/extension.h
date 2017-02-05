@@ -4,6 +4,7 @@
 namespace nanopbpp
 {
 
+template<size_t TAG>
 class base_extension
 {
 public:
@@ -34,12 +35,12 @@ private:
 	pb_extension_t extension;
 };
 
-template<typename T>
-class extension_with_storage : base_extension
+template<size_t TAG, typename T>
+class extension_with_storage : base_extension<TAG>
 {
 public:
 	extension_with_storage(const pb_extension_type_t &extension) :
-		base_extension (extension)
+		base_extension<TAG> (extension)
 	{
 	}
 
@@ -56,7 +57,7 @@ public:
 	template<typename U>
 	void attach(U &message)
 	{
-		base_extension::attach(message, storage);
+		base_extension<TAG>::attach(message, storage);
 	}
 
 private:
