@@ -4,12 +4,42 @@
 namespace nanopbpp
 {
 
+class base_extension
+{
+public:
+	base_extension(const pb_extension_type_t &extension) :
+		extension_def (extension)
+	{
+	}
+
+	template<typename U, typename T>
+	void attach(U &message, T &storage)
+	{
+		extension.found = false;
+		extension.dest = &storage;
+		extension.type = &extension_def;
+		extension.next = nullptr;
+
+		if (message.extensions) {
+			extension.next = message.extensions;
+			message.extensions = &extension;
+		} else {
+			message.extensions = &extension;
+		}
+
+	}
+
+private:
+	const pb_extension_type_t &extension_def;
+	pb_extension_t extension;
+};
+
 template<typename T>
-class extension_with_storage
+class extension_with_storage : base_extension
 {
 public:
 	extension_with_storage(const pb_extension_type_t &extension) :
-		extension_def (extension)
+		base_extension (extension)
 	{
 	}
 
@@ -26,23 +56,11 @@ public:
 	template<typename U>
 	void attach(U &message)
 	{
-		extension.found = false;
-		extension.dest = &storage;
-		extension.type = &extension_def;
-		extension.next = nullptr;
-
-		if (message.extensions) {
-			extension.next = message.extensions;
-			message.extensions = &extension;
-		} else {
-			message.extensions = &extension;
-		}
+		base_extension::attach(message, storage);
 	}
 
 private:
 	T storage;
-	const pb_extension_type_t &extension_def;
-	pb_extension_t extension;
 };
 
 }

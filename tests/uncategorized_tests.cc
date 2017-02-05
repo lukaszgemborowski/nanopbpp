@@ -84,6 +84,33 @@ TEST(uncategorized_tests, encode_decode_with_extension_and_helpers)
 	ASSERT_EQ(source_field.b, destination_field.b);
 }
 
+TEST(uncategorized_tests, base_extension_usage)
+{
+	std::vector<uint8_t> buffer(256);
+
+	IntegerContainer source_storage = { 0 }, destination_storage = { 0 };
+	nanopbpp::base_extension source_ext(field_a);
+	nanopbpp::base_extension destination_ext(field_a);
+
+	source_storage.a = 2;
+	source_storage.has_b = true;
+	source_storage.b = 4;
+
+	Extendable source = { 0 }, destination = { 0 };
+
+	source_ext.attach(source, source_storage);
+
+	ASSERT_TRUE(nanopbpp::create_encoder(buffer.begin(), buffer.end(), messages_metadata).encode(source));
+
+	destination_ext.attach(destination, destination_storage);
+
+	ASSERT_TRUE(nanopbpp::create_decoder(buffer.begin(), buffer.end(), messages_metadata).decode(destination));
+
+	ASSERT_EQ(source_storage.a, destination_storage.a);
+	ASSERT_EQ(source_storage.has_b, destination_storage.has_b);
+	ASSERT_EQ(source_storage.b, destination_storage.b);
+}
+
 TEST(uncategorized_tests, extension_helper)
 {
 	std::vector<uint8_t> buffer(256);
