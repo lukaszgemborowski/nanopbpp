@@ -5,3 +5,11 @@ message IntegerContainer {
 	required int32 a = 1;
 	optional int32 b = 2;
 }
+
+message Extendable {
+	extensions 10 to 100;
+}
+
+extend Extendable {
+	optional IntegerContainer field_a = 11;
+}

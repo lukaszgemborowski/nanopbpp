@@ -30,3 +30,41 @@ TEST(nanopb, encode_decode_basic_buffer)
 	ASSERT_EQ(source.has_b, destination.has_b);
 	ASSERT_EQ(source.b, destination.b);
 }
+
+TEST(nanopb, encode_decode_with_extension)
+{
+	uint8_t buffer[256];
+	IntegerContainer source_field = { 0 };
+	IntegerContainer destination_field = { 0 };
+
+	source_field.a = 2;
+	source_field.has_b = true;
+	source_field.b = 3;
+
+	Extendable source = { 0 };
+	Extendable destination = { 0 };
+
+	pb_extension_t ext = { 0 };
+	ext.type = &field_a;
+	ext.dest = &source_field;
+	ext.next = nullptr;
+	ext.found = false;
+
+	source.extensions = &ext;
+
+	auto ostream = pb_ostream_from_buffer(buffer, sizeof(buffer));
+	ASSERT_TRUE(pb_encode(&ostream, Extendable_fields, &source));
+
+	ext.type = &field_a;
+	ext.next = nullptr;
+	ext.found = false;
+	ext.dest = &destination_field;
+	destination.extensions = &ext;
+
+	auto istream = pb_istream_from_buffer(buffer, ostream.bytes_written);
+	ASSERT_TRUE(pb_decode(&istream, Extendable_fields, &destination));
+
+	ASSERT_EQ(source_field.a, destination_field.a);
+	ASSERT_EQ(source_field.has_b, destination_field.has_b);
+	ASSERT_EQ(source_field.b, destination_field.b);
+}
