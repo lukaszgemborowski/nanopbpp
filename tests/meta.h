@@ -3,10 +3,11 @@
 #include <nanopbpp/metadata.h>
 #include "test.pb.h"
 
-static std::tuple<
+static nanopbpp::messages_metadata_set<
 	nanopbpp::message_metadata<IntegerContainer>,
 	nanopbpp::message_metadata<Extendable>
-> messages_metadata = std::make_tuple(
+> messages_metadata(
 	IntegerContainer_fields,
 	Extendable_fields
+
 );

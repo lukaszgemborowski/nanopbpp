@@ -19,7 +19,7 @@ public:
 	template<typename T>
 	bool encode(T &source)
 	{
-		return basic_encoder<It>::encode(cpp::get_by_type<message_metadata<T>>(meta).fields, &source);
+		return basic_encoder<It>::encode(cpp::get_by_type<message_metadata<T>>(meta.messages).fields, &source);
 	}
 
 private:
