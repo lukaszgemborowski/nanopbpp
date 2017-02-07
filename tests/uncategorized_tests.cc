@@ -174,7 +174,7 @@ TEST(uncategorized_tests, callback_extension)
 
 	IntegerContainer source_storage = { 0 };
 	nanopbpp::simple_extension<field_a_tag> source_ext(field_a);
-	nanopbpp::callback_extension<field_a_tag> destination_ext;
+	nanopbpp::callback_extension<field_a_tag> destination_ext(field_a);
 
 	source_storage.a = 2;
 	source_storage.has_b = true;

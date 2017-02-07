@@ -89,8 +89,11 @@ template<size_t TAG>
 class callback_extension : public base_extension<TAG>
 {
 public:
-	callback_extension() :
-		callback()
+	callback_extension(const pb_extension_type_t &extension) :
+		callback(),
+		custom_def {0},
+		extension {0},
+		fake {0} // this fake is importat, it needs to be 0-ed out (especially tag field)
 	{
 		custom_def.decode = &callback_extension<TAG>::decode;
 		custom_def.encode = nullptr;
@@ -98,7 +101,7 @@ public:
 	}
 
 	template<typename U, typename F>
-	void attach(U &message, F func)
+	void attach(U &message, const F &func)
 	{
 		this->attach_to_message(extension, custom_def, message);
 		extension.type = &custom_def;
