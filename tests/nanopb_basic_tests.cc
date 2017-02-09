@@ -119,3 +119,44 @@ TEST(nanopb, BUG_encode_decode_extension)
 
 	EXPECT_NE(0, ostream.bytes_written);
 }
+
+TEST(nanopb, decode_multiple_extensions)
+{
+	uint8_t buffer[256];
+	IntegerContainer source_field_a = { 0 }, destination_field_a = { 0 };
+	FloatContainer source_field_b = { 0 }, destination_field_b = { 0 };;
+	Extendable source = { 0 }, destination = { 0 };
+
+	source_field_a.a = 10;
+	source_field_a.has_b = true;
+	source_field_a.b = 20;
+	source_field_b.c = 30.4f;
+
+	pb_extension_t source_ext_a = { 0 }, source_ext_b = { 0 };
+	source_ext_a.type = &field_a;
+	source_ext_a.dest = &source_field_a;
+	source_ext_a.next = &source_ext_b;
+	source_ext_b.type = &field_b;
+	source_ext_b.dest = &source_field_b;
+
+	source.extensions = &source_ext_a;
+
+	auto ostream = pb_ostream_from_buffer(buffer, sizeof(buffer));
+	ASSERT_TRUE(pb_encode(&ostream, Extendable_fields, &source));
+
+	pb_extension_t destination_ext_a = { 0 }, destination_ext_b = { 0 } ;
+	destination_ext_a.type = &field_a;
+	destination_ext_a.dest = &destination_field_a;
+	destination_ext_a.next = &destination_ext_b;
+	destination_ext_b.type = &field_b;
+	destination_ext_b.dest = &destination_field_b;
+
+	destination.extensions = &destination_ext_a;
+
+	auto istream = pb_istream_from_buffer(buffer, ostream.bytes_written);
+	ASSERT_TRUE(pb_decode(&istream, Extendable_fields, &destination));
+
+	ASSERT_EQ(source_field_a.a, destination_field_a.a);
+	ASSERT_EQ(source_field_a.b, destination_field_a.b);
+	ASSERT_EQ(source_field_b.c, destination_field_b.c);
+}
