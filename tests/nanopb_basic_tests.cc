@@ -31,6 +31,24 @@ TEST(nanopb, encode_decode_basic_buffer)
 	ASSERT_EQ(source.b, destination.b);
 }
 
+TEST(nanopb, encode_decode_empty_message_in_container)
+{
+	uint8_t buffer[512];
+	Container source = { 0 };
+	Container destination = { 0 };
+
+	source.has_field_a = true;
+
+	auto ostream = pb_ostream_from_buffer(buffer, sizeof(buffer));
+	ASSERT_TRUE(pb_encode(&ostream, Container_fields, &source));
+
+	EXPECT_NE(0, ostream.bytes_written);
+
+	auto istream = pb_istream_from_buffer(buffer, ostream.bytes_written);
+	ASSERT_TRUE(pb_decode(&istream, Container_fields, &destination));
+}
+
+
 TEST(nanopb, encode_decode_with_extension)
 {
 	uint8_t buffer[256];
@@ -84,11 +102,9 @@ bool nanopb_tests_decode_1(pb_istream_t *stream, pb_extension_t *extension, uint
 
 TEST(nanopb, BUG_encode_decode_extension)
 {
-	bool callback_called = false;
-	context ctx(callback_called);
 	uint8_t buffer[256];
 	IntegerContainer source_field = { 0 };
-	Extendable source = { 0 }, destination = { 0 };
+	Extendable source = { 0 };
 
 	pb_extension_t source_ext = { 0 };
 	source_ext.type = &field_a;
@@ -101,25 +117,5 @@ TEST(nanopb, BUG_encode_decode_extension)
 	auto ostream = pb_ostream_from_buffer(buffer, sizeof(buffer));
 	ASSERT_TRUE(pb_encode(&ostream, Extendable_fields, &source));
 
-	pb_field_t field = { 0 };
-	pb_extension_type_t type = { 0 };
-	pb_extension_t destination_ext = { 0 };
-
-	type.arg = &field;
-	type.decode  = &nanopb_tests_decode_1;
-	type.encode = nullptr;
-
-	destination_ext.type = &type;
-	destination_ext.next = nullptr;
-	destination_ext.found = false;
-	destination_ext.dest = &ctx;
-
-	// 0 bytes written -> decode callback won't be called for field
 	EXPECT_NE(0, ostream.bytes_written);
-
-	destination.extensions = &destination_ext;
-	auto istream = pb_istream_from_buffer(buffer, ostream.bytes_written);
-	ASSERT_TRUE(pb_decode(&istream, Extendable_fields, &destination));
-
-	EXPECT_TRUE(callback_called);
 }
