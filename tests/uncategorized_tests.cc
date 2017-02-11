@@ -191,3 +191,29 @@ TEST(uncategorized_tests, callback_extension)
 	ASSERT_TRUE(nanopbpp::create_decoder(buffer.begin(), buffer.end(), messages_metadata).decode(destination));
 	ASSERT_TRUE(callback_called);
 }
+
+TEST(uncategorized_tests, multiple_extensions_and_callback)
+{
+	std::vector<uint8_t> buffer(256);
+	int cb_count = 0;
+
+	nanopbpp::extension_with_storage<field_a_tag, IntegerContainer> ext_a(field_a);
+	nanopbpp::extension_with_storage<field_b_tag, FloatContainer> ext_b(field_b);
+
+	ext_a.value().a = 10;
+	ext_b.value().c = 12.3f;
+
+	Extendable src = {0}, dst = {0};
+
+	ext_a.attach(src);
+	ext_b.attach(src);
+
+	ASSERT_TRUE(nanopbpp::create_encoder(buffer.begin(), buffer.end(), messages_metadata).encode(src));
+
+	nanopbpp::callback_extension<field_a_tag> dst_ext(field_a);
+	dst_ext.attach(src, [&cb_count]() { cb_count ++; });
+
+	ASSERT_TRUE(nanopbpp::create_decoder(buffer.begin(), buffer.end(), messages_metadata).decode(src));
+
+	ASSERT_EQ(1, cb_count);
+}

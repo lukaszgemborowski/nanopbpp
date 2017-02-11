@@ -112,6 +112,9 @@ public:
 private:
 	static bool decode(pb_istream_t *stream, pb_extension_t *extension, uint32_t tag, pb_wire_type_t wire_type)
 	{
+		if (tag != TAG)
+			return true;
+
 		callback_extension<TAG> *self = reinterpret_cast<callback_extension<TAG> *>(extension->dest);
 		self->callback();
 		return true;
