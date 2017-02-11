@@ -150,11 +150,11 @@ TEST(nanopb, decode_multiple_extensions)
 bool nanopb_tests_decode_1(pb_istream_t *stream, pb_extension_t *extension, uint32_t tag, pb_wire_type_t wire_type)
 {
 	int *call_count = (int *)extension->dest;
-	*call_count = true;
+	(*call_count) ++;
 	return true;
 }
 
-TEST(nanopb, decode_multiple_extensions_with_simple_callback)
+TEST(nanopb, decode_one_extension_with_simple_callback)
 {
 	uint8_t buffer[256];
 	IntegerContainer source_field_a = { 0 };
@@ -194,5 +194,5 @@ TEST(nanopb, decode_multiple_extensions_with_simple_callback)
 	auto istream = pb_istream_from_buffer(buffer, ostream.bytes_written);
 	ASSERT_TRUE(pb_decode(&istream, Extendable_fields, &destination));
 
-	ASSERT_EQ(1, call_count);
+	ASSERT_EQ(2, call_count);
 }
