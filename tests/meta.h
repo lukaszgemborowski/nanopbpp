@@ -9,5 +9,5 @@ static nanopbpp::messages_metadata_set<
 > messages_metadata(
 	IntegerContainer_fields,
 	Extendable_fields
-
 );
+

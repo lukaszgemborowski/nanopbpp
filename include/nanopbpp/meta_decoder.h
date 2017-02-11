@@ -20,7 +20,7 @@ public:
 	template<typename T>
 	bool decode(T &source)
 	{
-		return basic_decoder<It>::decode(cpp::get_by_type<message_metadata<T>>(meta.messages).fields, &source);
+		return basic_decoder<It>::decode(meta.template fields<T>(), &source);
 	}
 
 private:
