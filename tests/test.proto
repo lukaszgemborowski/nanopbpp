@@ -14,6 +14,10 @@ message Extendable {
 	extensions 10 to 100;
 }
 
+message Container {
+	optional int32 field_a = 1;
+}
+
 extend Extendable {
 	optional IntegerContainer field_a = 11;
 	optional FloatContainer field_b = 12;
