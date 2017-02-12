@@ -1,7 +1,6 @@
 #pragma once
 
 #include "basic_decoder.h"
-#include "cpp/get_by_type.h"
 #include "metadata.h"
 
 namespace nanopbpp

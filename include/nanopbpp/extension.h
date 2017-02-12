@@ -1,5 +1,4 @@
 #pragma once
-#include "cpp/get_by_type.h"
 #include <type_traits>
 #include <functional>
 #include <pb.h>
