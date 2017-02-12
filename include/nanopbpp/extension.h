@@ -18,9 +18,9 @@ public:
 	}
 
 	template<typename U>
-	void attach_to_message(pb_extension_t &extension, const pb_extension_type_t &type, U &message)
+	void attach_to_message(pb_extension_t &extension, U &message)
 	{
-		extension.type = &type;
+		extension.type = &definition;
 
 		if (message.extensions) {
 			extension.next = message.extensions;
@@ -53,7 +53,7 @@ public:
 	template<typename U, typename T>
 	void attach(U &message, T &storage)
 	{
-		this->attach_to_message(extension, this->definition, message);
+		this->attach_to_message(extension, message);
 		this->attach_to_storage(extension, storage);
 	}
 
@@ -109,7 +109,7 @@ public:
 	template<typename U, typename F>
 	void attach(U &message, const F &func)
 	{
-		this->attach_to_message(extension, this->definition, message);
+		this->attach_to_message(extension, message);
 		extension.type = &this->definition;
 		extension.dest = this;
 		callback = func;
