@@ -12,6 +12,11 @@ class base_extension
 public:
 	static constexpr size_t EXTENSION_TAG = TAG;
 
+	base_extension(const pb_extension_type_t &original) :
+		definition (original)
+	{
+	}
+
 	template<typename U>
 	void attach_to_message(pb_extension_t &extension, const pb_extension_type_t &type, U &message)
 	{
@@ -31,6 +36,9 @@ public:
 	{
 		extension.dest = &storage;
 	}
+
+protected:
+	pb_extension_type_t definition;
 };
 
 template<size_t TAG>
@@ -38,20 +46,19 @@ class simple_extension : public base_extension<TAG>
 {
 public:
 	simple_extension(const pb_extension_type_t &extension) :
-		extension_def (extension)
+		base_extension<TAG> (extension)
 	{
 	}
 
 	template<typename U, typename T>
 	void attach(U &message, T &storage)
 	{
-		this->attach_to_message(extension, extension_def, message);
+		this->attach_to_message(extension, this->definition, message);
 		this->attach_to_storage(extension, storage);
 	}
 
 private:
 	pb_extension_t extension;
-	const pb_extension_type_t &extension_def;
 };
 
 
@@ -89,21 +96,21 @@ class callback_extension : public base_extension<TAG>
 {
 public:
 	callback_extension(const pb_extension_type_t &extension) :
+		base_extension<TAG> (extension),
 		callback(),
-		custom_def {0},
 		extension {0},
 		fake {0} // this fake is importat, it needs to be 0-ed out (especially tag field)
 	{
-		custom_def.decode = &callback_extension<TAG>::decode;
-		custom_def.encode = nullptr;
-		custom_def.arg = &fake;
+		this->definition.decode = &callback_extension<TAG>::decode;
+		this->definition.encode = nullptr;
+		this->definition.arg = &fake;
 	}
 
 	template<typename U, typename F>
 	void attach(U &message, const F &func)
 	{
-		this->attach_to_message(extension, custom_def, message);
-		extension.type = &custom_def;
+		this->attach_to_message(extension, this->definition, message);
+		extension.type = &this->definition;
 		extension.dest = this;
 		callback = func;
 	}
@@ -121,7 +128,6 @@ private:
 
 private:
 	std::function<void ()> callback;
-	pb_extension_type_t custom_def;
 	pb_extension_t extension;
 	pb_field_t fake;
 };
