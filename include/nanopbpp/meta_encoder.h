@@ -16,7 +16,7 @@ public:
 	}
 
 	template<typename T>
-	bool encode(T &source)
+	bool encode(const T &source)
 	{
 		return basic_encoder<It>::encode(meta. template fields<T>(), &source);
 	}
@@ -32,7 +32,7 @@ meta_encoder<It, Meta> create_encoder(It begin, It end, Meta &meta)
 }
 
 template<typename It, typename Meta, typename T>
-bool encode(Meta &meta, It begin, It end, T &source)
+bool encode(Meta &meta, It begin, It end, const T &source)
 {
 	return create_encoder(begin, end, meta).encode(source);
 }
