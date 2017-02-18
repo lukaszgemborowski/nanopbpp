@@ -22,6 +22,7 @@ private:
 
 public:
 	typedef E extensions_set_t;
+	typedef T message_t;
 
 	message_metadata(const pb_field_t *fields, E e = extension_metadata_set<>())
 		: fields (fields), extensions (e) {}

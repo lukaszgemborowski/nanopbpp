@@ -6,8 +6,7 @@
 TEST(message_tests, accessing_fields)
 {
 	using namespace nanopbpp;
-
-	message<IntegerContainer> msg;
+	auto msg = make_message(messages_metadata.get_by_meta_type<IntegerContainer>());
 
 	msg->a = 1;
 	msg->has_b = true;

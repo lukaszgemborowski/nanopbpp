@@ -1,5 +1,6 @@
 #pragma once
 #include "message_metadata.h"
+#include "message.h"
 
 namespace nanopbpp
 {
