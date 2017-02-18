@@ -4,18 +4,10 @@
 #include <pb.h>
 #include "extension.h"
 #include "extension_metadata.h"
+#include "extension_metadata_set.h"
 
 namespace nanopbpp
 {
-
-template<typename... E>
-struct extension_metadata_set
-{
-	extension_metadata_set(E... exts) : extensions(std::make_tuple(exts...)) {}
-	std::tuple<E...> extensions;
-
-	using extensions_tuple_t = std::tuple<E...>;
-};
 
 template<typename T, typename E = extension_metadata_set<> >
 struct message_metadata
