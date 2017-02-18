@@ -42,6 +42,7 @@ add_executable(tests
 	metadata_tests.cc
 	base_extension_tests.cc
 	extension_tests.cc
+	scenarios.cc
 	${test-pb-c}
 	${NANOPB_SRC})
 
