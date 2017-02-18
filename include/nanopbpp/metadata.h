@@ -9,15 +9,15 @@ namespace nanopbpp
 {
 
 template<typename... E>
-struct extensions_metadata_set
+struct extension_metadata_set
 {
-	extensions_metadata_set(E... exts) : extensions(std::make_tuple(exts...)) {}
+	extension_metadata_set(E... exts) : extensions(std::make_tuple(exts...)) {}
 	std::tuple<E...> extensions;
 
 	using extensions_tuple_t = std::tuple<E...>;
 };
 
-template<typename T, typename E = extensions_metadata_set<> >
+template<typename T, typename E = extension_metadata_set<> >
 struct message_metadata
 {
 private:
@@ -35,7 +35,7 @@ private:
 public:
 	typedef E extensions_set_t;
 
-	message_metadata(const pb_field_t *fields, E e = extensions_metadata_set<>())
+	message_metadata(const pb_field_t *fields, E e = extension_metadata_set<>())
 		: fields (fields), extensions (e) {}
 
 	// this requires C++14 support
