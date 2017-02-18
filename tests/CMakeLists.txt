@@ -43,6 +43,7 @@ add_executable(tests
 	base_extension_tests.cc
 	extension_tests.cc
 	scenarios.cc
+	message_tests.cc
 	${test-pb-c}
 	${NANOPB_SRC})
 
