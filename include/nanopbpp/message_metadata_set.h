@@ -44,6 +44,12 @@ public:
 		return get_by_meta_type<T>().fields;
 	}
 
+	template<typename T, typename E = typename std::tuple_element<get_by_type_impl<T, 0, M...>::value, std::tuple<M...>>::type::extensions_set_t>
+	message<message_metadata<T, E>> create()
+	{
+		return message<message_metadata<T, E>>(get_by_meta_type<T, E>());
+	}
+
 	message_metadata_set(M... messages) : messages(std::make_tuple(messages...)) {}
 	std::tuple<M...> messages;
 };
