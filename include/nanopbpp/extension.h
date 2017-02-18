@@ -43,36 +43,6 @@ private:
 	pb_extension_t pb_extension;
 };
 
-template<size_t TAG, typename T>
-class extension_with_storage : public extension<TAG, T>
-{
-public:
-	extension_with_storage(const pb_extension_type_t &extension) :
-		extension<TAG, T> (extension)
-	{
-	}
-
-	T& value()
-	{
-		return storage;
-	}
-
-	const T& value() const
-	{
-		return storage;
-	}
-
-	template<typename U>
-	void attach(U &message)
-	{
-		extension<TAG, T>::attach_to_message(message);
-		extension<TAG, T>::attach_to_storage(storage);
-	}
-
-private:
-	T storage;
-};
-
 template<size_t TAG>
 class callback_extension : public base_extension<TAG>
 {
