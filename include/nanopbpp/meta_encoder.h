@@ -1,6 +1,6 @@
 #pragma once
 #include "basic_encoder.h"
-#include <nanopbpp/metadata.h>
+#include <nanopbpp/message_metadata_set.h>
 
 namespace nanopbpp
 {

@@ -1,6 +1,7 @@
 #pragma once
 #include <tuple>
-#include <nanopbpp/metadata.h>
+#include <nanopbpp/message_metadata_set.h>
+#include <nanopbpp/extension_metadata_set.h>
 #include "test.pb.h"
 
 

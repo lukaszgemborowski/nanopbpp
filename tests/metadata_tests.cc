@@ -1,6 +1,5 @@
 #include <gtest/gtest.h>
-
-#include <nanopbpp/metadata.h>
+#include <nanopbpp/message_metadata_set.h>
 #include "test.pb.h"
 
 TEST(metadata_tests, instantiation)

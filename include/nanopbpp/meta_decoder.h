@@ -1,7 +1,7 @@
 #pragma once
 
 #include "basic_decoder.h"
-#include "metadata.h"
+#include "message_metadata_set.h"
 
 namespace nanopbpp
 {

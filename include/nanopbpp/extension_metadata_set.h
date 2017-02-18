@@ -1,5 +1,6 @@
 #pragma once
 #include <tuple>
+#include "extension_metadata.h"
 
 namespace nanopbpp
 {
