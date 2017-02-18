@@ -162,6 +162,11 @@ public:
 	{
 	}
 
+	extension_set(const std::tuple<E...> &extensions_tuple) :
+		extensions (extensions_tuple)
+	{
+	}
+
 	template<typename U>
 	void attach(U &message)
 	{
@@ -201,6 +206,11 @@ private:
 template<typename... E> extension_set<E...> make_extension_set(E... extensions)
 {
 	return extension_set<E...>(extensions...);
+}
+
+template<typename... E> extension_set<E...> make_extension_set(const std::tuple<E...> &extensions_tuple)
+{
+	return extension_set<E...>(extensions_tuple);
 }
 
 }
