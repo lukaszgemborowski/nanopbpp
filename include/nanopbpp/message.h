@@ -22,6 +22,21 @@ public:
 		return &storage;
 	}
 
+	const pb_field_t *fields() const
+	{
+		return meta.fields;
+	}
+
+	typename M::message_t& raw()
+	{
+		return storage;
+	}
+
+	const typename M::message_t& raw() const
+	{
+		return storage;
+	}
+
 private:
 	M &meta;
 	typename M::message_t storage;

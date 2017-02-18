@@ -45,6 +45,7 @@ add_executable(tests
 	scenarios.cc
 	message_tests.cc
 	message_metadata_set_tests.cc
+	message_encoder_tests.cc
 	${test-pb-c}
 	${NANOPB_SRC})
 
