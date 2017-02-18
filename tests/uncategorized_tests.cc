@@ -217,3 +217,35 @@ TEST(uncategorized_tests, multiple_extensions_and_callback)
 
 	ASSERT_EQ(1, cb_count);
 }
+
+TEST(uncategorized_tests, instatiate_tuple_of_extensions_from_metadata)
+{
+	std::vector<uint8_t> buffer(256);
+	IntegerContainer srca = {0}, dsta = {0};
+	FloatContainer srcb = {0}, dstb = {0};
+	Extendable srcmsg = {0}, dstmsg = {0};
+	auto extensions = messages_metadata.get_by_meta_type<Extendable>().instantiate_extensions();
+
+	extensions.get_by_tag<field_a_tag>().attach_to_storage(srca);
+	extensions.get_by_tag<field_b_tag>().attach_to_storage(srcb);
+
+	srca.a = 1;
+	srca.has_b = true;
+	srca.b = 2;
+	srcb.c = 3.4f;
+
+	extensions.attach(srcmsg);
+
+	ASSERT_TRUE(nanopbpp::create_encoder(buffer.begin(), buffer.end(), messages_metadata).encode(srcmsg));
+
+	extensions.get_by_tag<field_a_tag>().attach_to_storage(dsta);
+	extensions.get_by_tag<field_b_tag>().attach_to_storage(dstb);
+	extensions.attach(dstmsg);
+
+	ASSERT_TRUE(nanopbpp::create_decoder(buffer.begin(), buffer.end(), messages_metadata).decode(dstmsg));
+
+	ASSERT_EQ(srca.a, dsta.a);
+	ASSERT_EQ(srca.b, dsta.b);
+	ASSERT_EQ(srcb.c, dstb.c);
+
+}

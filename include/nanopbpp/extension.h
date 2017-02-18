@@ -12,10 +12,15 @@ class base_extension
 public:
 	static constexpr size_t EXTENSION_TAG = TAG;
 
-	template<typename U>
-	void attach_to_message(pb_extension_t &extension, const pb_extension_type_t &type, U &message)
+	base_extension(const pb_extension_type_t &original) :
+		definition (original)
 	{
-		extension.type = &type;
+	}
+
+	template<typename U>
+	void attach_to_message(pb_extension_t &extension, U &message) const
+	{
+		extension.type = &definition;
 
 		if (message.extensions) {
 			extension.next = message.extensions;
@@ -27,10 +32,42 @@ public:
 	}
 
 	template<typename T>
-	void attach_to_storage(pb_extension_t &extension, T &storage)
+	void attach_to_storage(pb_extension_t &extension, T &storage) const
 	{
 		extension.dest = &storage;
 	}
+
+protected:
+	pb_extension_type_t definition;
+};
+
+template<size_t TAG, typename T>
+class extension : public base_extension<TAG>
+{
+public:
+	extension(const pb_extension_type_t &original) : base_extension<TAG>(original)
+	{
+	}
+
+	void attach_to_storage(T &storage)
+	{
+		base_extension<TAG>::attach_to_storage(pb_extension, storage);
+	}
+
+	template<typename M>
+	void attach_to_message(M &message)
+	{
+		base_extension<TAG>::attach_to_message(pb_extension, message);
+	}
+
+	template<typename M>
+	void attach(M &message)
+	{
+		attach_to_message(message);
+	}
+
+private:
+	pb_extension_t pb_extension;
 };
 
 template<size_t TAG>
@@ -38,20 +75,19 @@ class simple_extension : public base_extension<TAG>
 {
 public:
 	simple_extension(const pb_extension_type_t &extension) :
-		extension_def (extension)
+		base_extension<TAG> (extension)
 	{
 	}
 
 	template<typename U, typename T>
 	void attach(U &message, T &storage)
 	{
-		this->attach_to_message(extension, extension_def, message);
+		this->attach_to_message(extension, message);
 		this->attach_to_storage(extension, storage);
 	}
 
 private:
 	pb_extension_t extension;
-	const pb_extension_type_t &extension_def;
 };
 
 
@@ -89,21 +125,21 @@ class callback_extension : public base_extension<TAG>
 {
 public:
 	callback_extension(const pb_extension_type_t &extension) :
+		base_extension<TAG> (extension),
 		callback(),
-		custom_def {0},
 		extension {0},
 		fake {0} // this fake is importat, it needs to be 0-ed out (especially tag field)
 	{
-		custom_def.decode = &callback_extension<TAG>::decode;
-		custom_def.encode = nullptr;
-		custom_def.arg = &fake;
+		this->definition.decode = &callback_extension<TAG>::decode;
+		this->definition.encode = nullptr;
+		this->definition.arg = &fake;
 	}
 
 	template<typename U, typename F>
 	void attach(U &message, const F &func)
 	{
-		this->attach_to_message(extension, custom_def, message);
-		extension.type = &custom_def;
+		this->attach_to_message(extension, message);
+		extension.type = &this->definition;
 		extension.dest = this;
 		callback = func;
 	}
@@ -121,7 +157,6 @@ private:
 
 private:
 	std::function<void ()> callback;
-	pb_extension_type_t custom_def;
 	pb_extension_t extension;
 	pb_field_t fake;
 };
@@ -144,6 +179,11 @@ class extension_set
 public:
 	extension_set(E... extensions) :
 		extensions (extensions...)
+	{
+	}
+
+	extension_set(const std::tuple<E...> &extensions_tuple) :
+		extensions (extensions_tuple)
 	{
 	}
 
@@ -186,6 +226,11 @@ private:
 template<typename... E> extension_set<E...> make_extension_set(E... extensions)
 {
 	return extension_set<E...>(extensions...);
+}
+
+template<typename... E> extension_set<E...> make_extension_set(const std::tuple<E...> &extensions_tuple)
+{
+	return extension_set<E...>(extensions_tuple);
 }
 
 }
