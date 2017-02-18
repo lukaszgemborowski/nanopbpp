@@ -4,6 +4,7 @@ The goal is to simplify some common tasks using C++ and metaprogramming
 wherever possible.
 
 Original nanopb implementation can be found here: https://github.com/nanopb/nanopb
+
 Project homepage is: http://jpa.kapsi.fi/nanopb/
 
 ## Idea
