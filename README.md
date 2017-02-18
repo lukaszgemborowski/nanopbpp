@@ -32,6 +32,7 @@ would be something like this:
 ```cpp
 static nanopbpp::message_metadata_set<
 	nanopbpp::message_metadata<IntegerContainer>,
+	nanopbpp::message_metadata<FloatContainer>,
 	nanopbpp::message_metadata<Extendable,
 		nanopbpp::extension_metadata_set<
 			nanopbpp::extension_metadata<field_a_tag, IntegerContainer>,
@@ -40,6 +41,7 @@ static nanopbpp::message_metadata_set<
 	>
 > messages_metadata(
 	{ IntegerContainer_fields },
+	{ FloatContainer_fields },
 	{ Extendable_fields, {field_a, field_b} }
 );
 ```
