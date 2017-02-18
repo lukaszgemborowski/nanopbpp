@@ -36,6 +36,11 @@ public:
 		extension.dest = &storage;
 	}
 
+	bool has_storage_attached(const pb_extension_t &extension) const
+	{
+		return extension.dest != nullptr;
+	}
+
 protected:
 	pb_extension_type_t definition;
 };

@@ -11,7 +11,9 @@ template<size_t TAG, typename T>
 class extension : public base_extension<TAG>
 {
 public:
-	extension(const pb_extension_type_t &original) : base_extension<TAG>(original)
+	extension(const pb_extension_type_t &original) :
+		base_extension<TAG>(original),
+		pb_extension {0}
 	{
 	}
 
@@ -37,6 +39,11 @@ public:
 	{
 		attach_to_message(message);
 		attach_to_storage(storage);
+	}
+
+	bool has_storage_attached() const
+	{
+		base_extension<TAG>::has_storage_attached(pb_extension);
 	}
 
 private:
