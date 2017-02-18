@@ -18,7 +18,7 @@ public:
 	}
 
 	template<typename U>
-	void attach_to_message(pb_extension_t &extension, U &message)
+	void attach_to_message(pb_extension_t &extension, U &message) const
 	{
 		extension.type = &definition;
 
@@ -32,7 +32,7 @@ public:
 	}
 
 	template<typename T>
-	void attach_to_storage(pb_extension_t &extension, T &storage)
+	void attach_to_storage(pb_extension_t &extension, T &storage) const
 	{
 		extension.dest = &storage;
 	}
@@ -48,6 +48,26 @@ public:
 	extension(const pb_extension_type_t &original) : base_extension<TAG>(original)
 	{
 	}
+
+	void attach_to_storage(T &storage)
+	{
+		base_extension<TAG>::attach_to_storage(pb_extension, storage);
+	}
+
+	template<typename M>
+	void attach_to_message(M &message)
+	{
+		base_extension<TAG>::attach_to_message(pb_extension, message);
+	}
+
+	template<typename M>
+	void attach(M &message)
+	{
+		attach_to_message(message);
+	}
+
+private:
+	pb_extension_t pb_extension;
 };
 
 template<size_t TAG>
