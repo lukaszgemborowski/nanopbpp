@@ -7,6 +7,7 @@
 #include <nanopbpp/meta_decoder.h>
 #include <nanopbpp/meta_encoder.h>
 #include <nanopbpp/extension.h>
+#include <nanopbpp/extension_set.h>
 #include "meta.h"
 
 TEST(uncategorized_tests, encode_decode_with_helpers)
