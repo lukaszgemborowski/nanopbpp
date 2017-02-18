@@ -31,4 +31,10 @@ meta_encoder<It, Meta> create_encoder(It begin, It end, Meta &meta)
 	return meta_encoder<It, Meta>(begin, end, meta);
 }
 
+template<typename It, typename Meta, typename T>
+bool encode(Meta &meta, It begin, It end, T &source)
+{
+	return create_encoder(begin, end, meta).encode(source);
+}
+
 }

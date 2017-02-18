@@ -32,4 +32,11 @@ meta_decoder<It, Meta> create_decoder(It begin, It end, Meta &meta)
 	return meta_decoder<It, Meta>(begin, end, meta);
 }
 
+template<typename It, typename Meta, typename T>
+bool decode(Meta &meta, It begin, It end, T &destination)
+{
+	return create_decoder(begin, end, meta).decode(destination);
+}
+
+
 }
