@@ -7,7 +7,7 @@ TEST(metadata_tests, instantiation)
 {
 	using namespace nanopbpp;
 
-	messages_metadata_set<
+	message_metadata_set<
 		message_metadata<IntegerContainer>,
 		message_metadata<FloatContainer>>
 	messageset(

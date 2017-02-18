@@ -4,7 +4,7 @@
 #include "test.pb.h"
 
 
-static nanopbpp::messages_metadata_set<
+static nanopbpp::message_metadata_set<
 	nanopbpp::message_metadata<IntegerContainer>,
 	nanopbpp::message_metadata<Extendable,
 		nanopbpp::extension_metadata_set<

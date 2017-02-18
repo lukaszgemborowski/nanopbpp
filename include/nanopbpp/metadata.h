@@ -49,7 +49,7 @@ public:
 };
 
 template<typename... M>
-class messages_metadata_set
+class message_metadata_set
 {
 	template<typename T, size_t N, typename... Args>
 	struct get_by_type_impl
@@ -87,7 +87,7 @@ public:
 		return get_by_meta_type<T>().fields;
 	}
 
-	messages_metadata_set(M... messages) : messages(std::make_tuple(messages...)) {}
+	message_metadata_set(M... messages) : messages(std::make_tuple(messages...)) {}
 	std::tuple<M...> messages;
 };
 
