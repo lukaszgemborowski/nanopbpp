@@ -32,37 +32,23 @@ public:
 		attach_to_message(message);
 	}
 
+	template<typename M>
+	void attach(M &message, T& storage)
+	{
+		attach_to_message(message);
+		attach_to_storage(storage);
+	}
+
 private:
 	pb_extension_t pb_extension;
 };
 
-template<size_t TAG>
-class simple_extension : public base_extension<TAG>
-{
-public:
-	simple_extension(const pb_extension_type_t &extension) :
-		base_extension<TAG> (extension)
-	{
-	}
-
-	template<typename U, typename T>
-	void attach(U &message, T &storage)
-	{
-		this->attach_to_message(extension, message);
-		this->attach_to_storage(extension, storage);
-	}
-
-private:
-	pb_extension_t extension;
-};
-
-
 template<size_t TAG, typename T>
-class extension_with_storage : public simple_extension<TAG>
+class extension_with_storage : public extension<TAG, T>
 {
 public:
 	extension_with_storage(const pb_extension_type_t &extension) :
-		simple_extension<TAG> (extension)
+		extension<TAG, T> (extension)
 	{
 	}
 
@@ -79,7 +65,8 @@ public:
 	template<typename U>
 	void attach(U &message)
 	{
-		simple_extension<TAG>::attach(message, storage);
+		extension<TAG, T>::attach_to_message(message);
+		extension<TAG, T>::attach_to_storage(storage);
 	}
 
 private:
