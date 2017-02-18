@@ -26,4 +26,8 @@ TEST(scenarios, encode_and_decode_simple_message_with_static_buffer)
 
 	// decodemessage from buffer
 	ASSERT_TRUE(decode(messages_metadata, buffer.begin(), buffer.end(), destination));
+
+	ASSERT_EQ(source.a, destination.a);
+	ASSERT_EQ(source.b, destination.b);
+	ASSERT_EQ(source.has_b, destination.has_b);
 }
