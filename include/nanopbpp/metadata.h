@@ -50,6 +50,7 @@ public:
 	message_metadata(const pb_field_t *fields, E e = extensions_metadata_set<>())
 		: fields (fields), extensions (e) {}
 
+	// this requires C++14 support
 	auto instantiate_extensions() {
 		using seq = std::make_index_sequence<std::tuple_size<std::decay_t<typename E::extensions_tuple_t>>::value>;
 		return make_extension_set(instantiate_tuple_of_extensions(std::forward<typename E::extensions_tuple_t>(extensions.extensions), seq{}));
