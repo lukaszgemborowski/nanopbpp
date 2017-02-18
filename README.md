@@ -3,6 +3,9 @@ Lightweight C++ wrapper(s) library for nanopb implementation.
 The goal is to simplify some common tasks using C++ and metaprogramming
 wherever possible.
 
+Original nanopb implementation can be found here: https://github.com/nanopb/nanopb
+Project homepage is: http://jpa.kapsi.fi/nanopb/
+
 ## Idea
 Library is simplifying some common tasks using modern C++ features and it is also introducing more type safety to your project. To achieve it nanopb++ is introducing something which I personally like to call "metadata". This is description of your messages in C++ with some helper templates. It's most painfull part of using nanopb++ but it's done only once for a set of messages. In some future this task may be automated but for now it must be done manually. Example of such description for this proto file:
 ```
