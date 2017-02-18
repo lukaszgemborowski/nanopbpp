@@ -14,6 +14,9 @@ struct extension_metadata
 	{}
 
 	const pb_extension_type_t &extension_type_def;
+
+	static constexpr auto tag = TAG;
+	using type_t = T;
 };
 
 template<typename... E>

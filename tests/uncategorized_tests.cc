@@ -7,6 +7,7 @@
 #include <nanopbpp/meta_decoder.h>
 #include <nanopbpp/meta_encoder.h>
 #include <nanopbpp/extension.h>
+#include <nanopbpp/instantiate_extension.h>
 #include "meta.h"
 
 TEST(uncategorized_tests, encode_decode_with_helpers)
@@ -216,4 +217,9 @@ TEST(uncategorized_tests, multiple_extensions_and_callback)
 	ASSERT_TRUE(nanopbpp::create_decoder(buffer.begin(), buffer.end(), messages_metadata).decode(src));
 
 	ASSERT_EQ(1, cb_count);
+}
+
+TEST(uncategorized_tests, instatiate_tuple_of_extensions_from_metadata)
+{
+	auto extensions = nanopbpp::instantiate_extensions(messages_metadata.get_by_meta_type<Extendable>().extensions.extensions);
 }

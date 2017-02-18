@@ -43,5 +43,5 @@ add_executable(tests
 	${test-pb-c}
 	${NANOPB_SRC})
 
-target_compile_features(tests PRIVATE cxx_range_for)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
 target_link_libraries(tests ${GTEST_MAIN_LIBRARIES} ${GTEST_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})

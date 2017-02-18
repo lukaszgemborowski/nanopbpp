@@ -41,6 +41,15 @@ protected:
 	pb_extension_type_t definition;
 };
 
+template<size_t TAG, typename T>
+class extension : public base_extension<TAG>
+{
+public:
+	extension(const pb_extension_type_t &original) : base_extension<TAG>(original)
+	{
+	}
+};
+
 template<size_t TAG>
 class simple_extension : public base_extension<TAG>
 {
