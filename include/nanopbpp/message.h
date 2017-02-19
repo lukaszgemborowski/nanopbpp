@@ -10,7 +10,10 @@ template<typename M>
 class message
 {
 public:
-	message(M &meta) : meta (meta) {}
+	message(M &meta) :
+		meta (meta),
+		extensions (meta.instantiate_extensions())
+	{}
 
 	const typename M::message_t* operator->() const
 	{
@@ -39,6 +42,7 @@ public:
 
 private:
 	M &meta;
+	decltype(meta.instantiate_extensions()) extensions;
 	typename M::message_t storage;
 };
 

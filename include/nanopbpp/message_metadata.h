@@ -1,5 +1,6 @@
 #pragma once
 #include "extension_metadata_set.h"
+#include "extension_set.h"
 #include "extension.h"
 
 namespace nanopbpp
