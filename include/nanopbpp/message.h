@@ -13,7 +13,13 @@ public:
 	message(M &meta) :
 		meta (meta),
 		extensions (meta.instantiate_extensions())
-	{}
+	{
+		uint8_t *begin = reinterpret_cast<uint8_t *>(&storage);
+		uint8_t *end = begin + sizeof(storage);
+		std::fill(begin, end, 0);
+
+		extensions.attach(storage);
+	}
 
 	const typename M::message_t* operator->() const
 	{
@@ -38,6 +44,12 @@ public:
 	const typename M::message_t& raw() const
 	{
 		return storage;
+	}
+
+	template<size_t TAG>
+	auto& extension_by_tag()
+	{
+		return extensions.template get_by_tag<TAG>();
 	}
 
 private:
