@@ -40,7 +40,6 @@ add_executable(tests
 	basic_decoder_tests.cc
 	uncategorized_tests.cc
 	metadata_tests.cc
-	base_extension_tests.cc
 	extension_tests.cc
 	scenarios.cc
 	message_tests.cc

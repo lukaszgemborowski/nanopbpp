@@ -121,59 +121,6 @@ TEST(uncategorized_tests, extension_set_usage)
 	ASSERT_EQ(srcb.c, dstb.c);
 }
 
-TEST(uncategorized_tests, callback_extension)
-{
-	std::vector<uint8_t> buffer(256);
-	bool callback_called = false;
-
-	IntegerContainer source_storage = { 0 };
-	nanopbpp::extension<field_a_tag, IntegerContainer> source_ext(field_a);
-	nanopbpp::callback_extension<field_a_tag> destination_ext(field_a);
-
-	source_storage.a = 2;
-	source_storage.has_b = true;
-	source_storage.b = 4;
-
-	Extendable source = { 0 }, destination = { 0 };
-
-	source_ext.attach(source, source_storage);
-
-	ASSERT_TRUE(nanopbpp::create_encoder(buffer.begin(), buffer.end(), messages_metadata).encode(source));
-
-	destination_ext.attach(destination, [&callback_called]() { callback_called = true; });
-
-	ASSERT_TRUE(nanopbpp::create_decoder(buffer.begin(), buffer.end(), messages_metadata).decode(destination));
-	ASSERT_TRUE(callback_called);
-}
-
-TEST(uncategorized_tests, multiple_extensions_and_callback)
-{
-	std::vector<uint8_t> buffer(256);
-	int cb_count = 0;
-
-	IntegerContainer a = {0};
-	FloatContainer b = {0};
-	nanopbpp::extension<field_a_tag, IntegerContainer> ext_a(field_a);
-	nanopbpp::extension<field_b_tag, FloatContainer> ext_b(field_b);
-
-	a.a = 10;
-	b.c = 12.3f;
-
-	Extendable src = {0}, dst = {0};
-
-	ext_a.attach(src, a);
-	ext_b.attach(src, b);
-
-	ASSERT_TRUE(nanopbpp::create_encoder(buffer.begin(), buffer.end(), messages_metadata).encode(src));
-
-	nanopbpp::callback_extension<field_a_tag> dst_ext(field_a);
-	dst_ext.attach(src, [&cb_count]() { cb_count ++; });
-
-	ASSERT_TRUE(nanopbpp::create_decoder(buffer.begin(), buffer.end(), messages_metadata).decode(src));
-
-	ASSERT_EQ(1, cb_count);
-}
-
 TEST(uncategorized_tests, instatiate_tuple_of_extensions_from_metadata)
 {
 	std::vector<uint8_t> buffer(256);
